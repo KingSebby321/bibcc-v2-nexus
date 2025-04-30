@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIBCC Platform</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Cyberpunk-inspired color scheme */
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h1, p {
+            color: #FFFFFF;
+            text-transform: uppercase;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(169, 38, 230, 0.7);
+        }
+
+        .navbar {
+            background-color: #1f1d36;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
+        }
+
+        .navbar-brand {
+            color: #A926E6;
+            font-weight: bold;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #FFFFFF;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #A926E6;
+        }
+
+        .hamburger-menu {
+            display: none;
+        }
+
+        @media (max-width: 992px) {
+            .hamburger-menu {
+                display: block;
+                color: #FFFFFF;
+            }
+
+            .navbar-nav {
+                display: none;
+            }
+
+            .navbar-nav.active {
+                display: block;
+                background-color: #1f1d36;
+                position: absolute;
+                top: 60px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .navbar-nav .nav-link {
+                display: block;
+                padding: 1rem;
+                border-bottom: 1px solid #A926E6;
+            }
+        }
+
+        .container {
+            margin-top: 100px;
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #A926E6;
+            border: none;
+            color: #FFFFFF;
+            padding: 1rem 2rem;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 50px;
+            box-shadow: 0 0 15px rgba(169, 38, 230, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #e09eff;
+            box-shadow: 0 0 30px rgba(224, 158, 255, 1);
+            transform: translateY(-5px);
+        }
+
+        #light-pollution-map {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            margin-top: 50px;
+        }
+
+        #light-pollution-map img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer {
+            background-color: #1f1d36;
+            padding: 1rem;
+            text-align: center;
+            color: #FFFFFF;
+            margin-top: 50px;
+        }
+        
+        /* Glow animation */
+        .neon-glow {
+            color: #A926E6;
+            text-shadow: 0 0 5px #A926E6, 0 0 10px #A926E6, 0 0 20px #A926E6, 0 0 40px #ff00ff, 0 0 80px #ff00ff;
+        }
+        
+        /* Add subtle floating animation for the futuristic feel */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand neon-glow" href="#">BIBCC</a>
+        <button class="hamburger-menu navbar-toggler" type="button" aria-label="Toggle navigation">
+            <span>&#9776;</span>
+        </button>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="neon-glow floating">Welcome to BIBCC</h1>
+        <p class="floating">Explore fraud, compliance, and regulatory data across multiple categories</p>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <a href="/sanctions" class="btn btn-lg btn-block floating" role="button" aria-label="Sanctions Lists">Sanctions Lists</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/corrupt_officials" class="btn btn-lg btn-block floating" role="button" aria-label="Corrupt Public Officials">Corrupt Public Officials</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/aml_fines" class="btn btn-lg btn-block floating" role="button" aria-label="AML/KYC Fines">AML/KYC Fines</a>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <a href="/regulatory_updates" class="btn btn-lg btn-block floating" role="button" aria-label="Regulatory Updates">Regulatory Updates</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/fraud_network_analysis" class="btn btn-lg btn-block floating" role="button" aria-label="Fraud Network Analysis">Fraud Network Analysis</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/analytics_dashboard" class="btn btn-lg btn-block floating" role="button" aria-label="Analytics Dashboard">Analytics Dashboard</a>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <a href="/industry_events" class="btn btn-lg btn-block floating" role="button" aria-label="Industry Events">Industry Events</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/important_people" class="btn btn-lg btn-block floating" role="button" aria-label="Important People">Important People</a>
+            </div>
+        </div>
+        
+
+
+        <!-- Light Pollution Map -->
+        <div id="light-pollution-map">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Light_pollution_US_map.jpg" alt="Light Pollution Map of USA">
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 BIBCC. All Rights Reserved.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Toggle navbar on mobile
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        const navbarNav = document.querySelector('.navbar-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            navbarNav.classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>

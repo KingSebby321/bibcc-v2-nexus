@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Important People - BIBCC</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Cyberpunk-inspired design */
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: #A926E6;
+            text-transform: uppercase;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(169, 38, 230, 0.7);
+        }
+
+        .container {
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .people-section {
+            background-color: #766bf0;
+            padding: 2rem;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(169, 38, 230, 0.8);
+        }
+
+        .footer {
+            background-color: #1f1d36;
+            padding: 1rem;
+            text-align: center;
+            color: #FFFFFF;
+            margin-top: 50px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            color: #FFFFFF;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #be3c8d;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #2db328;
+        }
+
+        tr:nth-child(even) {
+            background-color: #d9aaff;
+        }
+
+        .search-bar {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #302b63;
+            border-radius: 8px;
+        }
+
+        .search-bar input {
+            width: 70%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #A926E6;
+            color: white;
+            border-radius: 4px;
+        }
+
+        /* Header Styling */
+        .navbar {
+            background-color: #1f1d36;
+            padding: 10px;
+            border-bottom: 1px solid #A926E6;
+        }
+
+        .navbar-brand {
+            color: #A926E6;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(169, 38, 230, 0.7);
+        }
+
+        .navbar-brand:hover {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+
+        /* Hamburger Menu */
+        .navbar-toggler {
+            background-color: #A926E6;
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            background-color: #FFFFFF;
+        }
+
+        .navbar-nav .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #A926E6;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar / Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">BIBCC</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sanctions">Sanctions List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/industry_events">Industry Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/important_people">Important People</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="neon-glow">Important People</h1>
+        <p>Find and network with key figures in fraud fighting and regulatory compliance.</p>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form method="GET" action="/important_people">
+                <input type="text" name="query" placeholder="Search by industry, organization, name, or education" value="{{ request.args.get('query', '') }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Dynamic Content Section for Top Regulators and Industry Leaders -->
+        <div class="people-section">
+            <h2>Search Results</h2>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Industry</th>
+                        <th>Organization</th>
+                        <th>Name</th>
+                        <th>Education</th>
+                        <th>Contact Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for person in important_people %}
+                    <tr>
+                        <td>{{ person[0] }}</td>
+                        <td>{{ person[1] }}</td>
+                        <td>{{ person[2] }}</td>
+                        <td>{{ person[3] }}</td>
+                        <td>{{ person[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if not important_people %}
+            <p>No results found. Try searching for another keyword.</p>
+            {% endif %}
+        </div>
+
+        <div class="people-section">
+            <h2>Top Regulators</h2>
+            <p>Placeholder for top regulators with links to social media and contact details.</p>
+        </div>
+
+        <div class="people-section">
+            <h2>Industry Leaders</h2>
+            <p>Placeholder for fraud fighters and leaders in financial compliance.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 BIBCC. All Rights Reserved.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

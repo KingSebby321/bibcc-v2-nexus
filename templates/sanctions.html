@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIBCC V2 Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .spinner {
+            display: none;
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgb(169, 38, 230);
+            border-top: 5px solid rgb(177, 161, 223);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>BIBCC V2 Dashboard</h1>
+
+        <!-- Loading Spinner -->
+        <div class="spinner" id="loadingSpinner"></div>
+
+        <!-- Search Input -->
+        <div class="form-group mt-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by Name, Country, or Business Type">
+        </div>
+
+        <!-- Data Table -->
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th id="sortId">ID</th>
+                    <th id="sortName">Name</th>
+                    <th id="sortType">Type</th>
+                    <th id="sortCountry">Country</th>
+                    <th id="sortLocation">Location</th>
+                    <th id="sortBusinessType">Business Type</th>
+                    <th id="sortStolenAmount">Stolen Amount</th>
+                    <th id="sortAffiliatedRegime">Affiliated Regime</th>
+                    <th id="sortRegion">Region</th>
+                    <th id="sortNotes">Notes</th>
+                </tr>
+            </thead>
+            <tbody id="data-table"></tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="pagination-controls"></ul>
+        </nav>
+
+        <!-- Chart Canvas -->
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- JavaScript Code -->
+    <script>
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        let data = [];
+
+        // Show spinner while data is loading
+        const spinner = document.getElementById('loadingSpinner');
+        spinner.style.display = 'block';
+
+        // Fetch data from the Flask API and populate the table and chart
+        fetch('/data')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(fetchedData => {
+                spinner.style.display = 'none'; // Hide spinner once data is loaded
+                if (fetchedData.length === 0) {
+                    alert('No data available');
+                    return;
+                }
+                data = fetchedData;
+                displayData(data, currentPage);
+                populateChart(data);
+            })
+            .catch(error => {
+                spinner.style.display = 'none'; // Hide spinner in case of error
+                console.error('Error fetching data:', error);
+                alert('Failed to load data. Please try again later.');
+            });
+
+        // Function to display data in the table with pagination
+        function displayData(filteredData, page = 1) {
+            const tableBody = document.getElementById('data-table');
+            const paginationControls = document.getElementById('pagination-controls');
+            tableBody.innerHTML = ''; // Clear previous results
+
+            const startIndex = (page - 1) * itemsPerPage;
+            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+            paginatedData.forEach(item => {
+                let row = `<tr>
+                    <td>${item.ID}</td>
+                    <td>${item.Name}</td>
+                    <td>${item.Type}</td>
+                    <td>${item.Country}</td>
+                    <td>${item.Location}</td>
+                    <td>${item['Business Type']}</td>
+                    <td>${item['Stolen Amount']}</td>
+                    <td>${item['Affiliated Regime']}</td>
+                    <td>${item.Region}</td>
+                    <td>${item.Notes}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+
+            displayPagination(filteredData.length, page);
+        }
+
+        // Function to display pagination controls
+        function displayPagination(totalItems, currentPage) {
+            const paginationControls = document.getElementById('pagination-controls');
+            paginationControls.innerHTML = '';
+
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                let pageItem = document.createElement('li');
+                pageItem.classList.add('page-item');
+                if (i === currentPage) pageItem.classList.add('active');
+                pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                pageItem.addEventListener('click', () => displayData(data, i));
+                paginationControls.appendChild(pageItem);
+            }
+        }
+
+        // Sorting functionality
+        document.getElementById('sortId').addEventListener('click', () => sortData('ID'));
+        document.getElementById('sortName').addEventListener('click', () => sortData('Name'));
+        document.getElementById('sortType').addEventListener('click', () => sortData('Type'));
+        document.getElementById('sortCountry').addEventListener('click', () => sortData('Country'));
+        document.getElementById('sortLocation').addEventListener('click', () => sortData('Location'));
+        document.getElementById('sortBusinessType').addEventListener('click', () => sortData('Business Type'));
+        document.getElementById('sortStolenAmount').addEventListener('click', () => sortData('Stolen Amount'));
+        document.getElementById('sortAffiliatedRegime').addEventListener('click', () => sortData('Affiliated Regime'));
+        document.getElementById('sortRegion').addEventListener('click', () => sortData('Region'));
+        document.getElementById('sortNotes').addEventListener('click', () => sortData('Notes'));
+
+        function sortData(field) {
+            const sortedData = [...data].sort((a, b) => (a[field] > b[field]) ? 1 : -1);
+            displayData(sortedData, currentPage);
+        }
+
+        // Chart population
+        function populateChart(data) {
+            let countryCounts = {};
+            data.forEach(item => {
+                if (item.Country in countryCounts) {
+                    countryCounts[item.Country]++;
+                } else {
+                    countryCounts[item.Country] = 1;
+                }
+            });
+
+            let labels = Object.keys(countryCounts);
+            let values = Object.values(countryCounts);
+
+            let ctx = document.getElementById('myChart').getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Entities by Country',
+                        data: values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.raw + ' entities';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
