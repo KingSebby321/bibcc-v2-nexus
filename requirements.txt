@@ -1,0 +1,12 @@
+beautifulsoup4
+flask
+nltk
+numpy
+openai
+pandas
+psycopg2-binary
+python-dotenv
+requests
+scikit-learn
+sqlalchemy
+tqdm
